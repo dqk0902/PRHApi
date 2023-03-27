@@ -20,7 +20,7 @@ namespace PRHapi.Controllers
         }
 
         [HttpGet("{postalCode}/companies")]
-        public ActionResult<List<Company>> GetALLByPostalCode(string postalCode)
+        public ActionResult<List<Company>> GetCompaniesByPostalCode(string postalCode)
         {
             // Get companies from database
             var companies = new List<Company>();
@@ -52,6 +52,7 @@ namespace PRHapi.Controllers
                     }
                 }
             }
+            return Ok(companies);
         }
     }
 }
