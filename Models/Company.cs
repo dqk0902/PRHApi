@@ -7,5 +7,6 @@ namespace Models
         public string? CompanyForm { get; set; }
         public string? DetailsUri { get; set; }
         public DateTime RegistrationDate { get; set; }
+        public string? PostalCode {get; set;}
     }
 }

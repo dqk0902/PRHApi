@@ -9,7 +9,6 @@ namespace Db
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
         }
-
         public DbSet<Company> Companies { get; set; }
     }
 }

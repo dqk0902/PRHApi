@@ -81,7 +81,7 @@ public class Program
     {
         var apiClient = new PrhApiClient();
         var connectionString = "Host=localhost;Username=postgres;Password=zzjjjhh;Database=postgres";
-        var companies = await apiClient.GetCompaniesByPostalCode("00700", connectionString);
+        var companies = await apiClient.GetCompaniesByPostalCode("01400", connectionString);
 
         foreach (var company in companies)
         {

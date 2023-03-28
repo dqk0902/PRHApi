@@ -1,58 +1,35 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Models;
+using Db;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Npgsql;
-using PRHApiClient;
-using Models;
+using System.Threading.Tasks;
+
 namespace PRHapi.Controllers
 {
-    [Route("postal_codes")]
     [ApiController]
+    [Route("[controller]")]
     public class PRHapiController : ControllerBase
     {
-        private readonly string _connectionString;
-        private readonly PrhApiClient _prhApiClient;
+        private readonly MyDbContext _context;
 
-        public PRHapiController(string connectionString, PrhApiClient prhApiClient)
+        public PRHapiController(MyDbContext context)
         {
-            _connectionString = connectionString;
-            _prhApiClient = prhApiClient;
+            _context = context;
         }
 
-        [HttpGet("{postalCode}/companies")]
-        public ActionResult<List<Company>> GetCompaniesByPostalCode(string postalCode)
+        [HttpGet("postal_codes/{postalCode}/companies")]
+        public async Task<ActionResult<IEnumerable<Company>>> GetCompaniesByPostalCode(string postalCode)
         {
-            // Get companies from database
-            var companies = new List<Company>();
-            using (var connection = new NpgsqlConnection(_connectionString))
+            var companies = await _context.Companies.Where(c => c.PostalCode == postalCode).ToListAsync();
+
+            if (companies == null || companies.Count == 0)
             {
-                connection.Open();
-
-                using (var command = new NpgsqlCommand())
-                {
-                    command.Connection = connection;
-                    command.CommandText = "SELECT * FROM companies WHERE postal_code = @postalCode";
-                    command.Parameters.AddWithValue("postalCode", postalCode);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var company = new Company
-                            {
-                                BusinessId = reader.IsDBNull(0) ? null : reader.GetString(0),
-                                Name = reader.IsDBNull(1) ? null : reader.GetString(1),
-                                CompanyForm = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                DetailsUri = reader.IsDBNull(3) ? null : reader.GetString(3),
-                                RegistrationDate = reader.GetDateTime(4)
-                            };
-
-                            companies.Add(company);
-                        }
-                    }
-                }
+                return NotFound();
             }
-            return Ok(companies);
+
+            return companies;
         }
     }
 }

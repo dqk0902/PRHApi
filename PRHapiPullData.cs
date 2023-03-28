@@ -27,7 +27,7 @@ namespace PRHApiClient
 
         public async Task<List<Company>> GetCompaniesByPostalCode(string postalCode, string connectionString)
 {
-    var requestUrl = $"{ApiBaseUrl}?totalResults=false&maxResults=10&resultsFrom=0&streetAddressPostCode={postalCode}&companyRegistrationFrom=2014-02-28";
+    var requestUrl = $"{ApiBaseUrl}?totalResults=false&maxResults=20&resultsFrom=0&streetAddressPostCode={postalCode}&companyRegistrationFrom=2014-02-28";
 
     var response = await _httpClient.GetAsync(requestUrl);
 
@@ -45,15 +45,16 @@ namespace PRHApiClient
 
         foreach (var company in companies)
         {
-            using (var cmd = new NpgsqlCommand("INSERT INTO companies (business_id, name, company_form, details_uri, registration_date) VALUES (@BusinessId, @Name, @CompanyForm, @DetailsUri, @RegistrationDate)", conn))
-            {
-                cmd.Parameters.AddWithValue("BusinessId", company.BusinessId);
-                cmd.Parameters.AddWithValue("Name", company.Name);
-                cmd.Parameters.AddWithValue("CompanyForm", company.CompanyForm);
-                cmd.Parameters.AddWithValue("DetailsUri", company.DetailsUri);
-                cmd.Parameters.AddWithValue("RegistrationDate", company.RegistrationDate);
-                await cmd.ExecuteNonQueryAsync();
-            }
+            using (var cmd = new NpgsqlCommand("INSERT INTO companies (business_id, name, company_form, details_uri, registration_date, postal_code) VALUES (@BusinessId, @Name, @CompanyForm, @DetailsUri, @RegistrationDate, @PostalCode)", conn))
+{
+    cmd.Parameters.AddWithValue("BusinessId", company.BusinessId);
+    cmd.Parameters.AddWithValue("Name", company.Name);
+    cmd.Parameters.AddWithValue("CompanyForm", company.CompanyForm);
+    cmd.Parameters.AddWithValue("DetailsUri", company.DetailsUri);
+    cmd.Parameters.AddWithValue("RegistrationDate", company.RegistrationDate);
+    cmd.Parameters.AddWithValue("PostalCode", postalCode);
+    await cmd.ExecuteNonQueryAsync();
+}
         }
     }
 
