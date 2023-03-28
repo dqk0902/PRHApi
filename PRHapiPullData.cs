@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using Npgsql;
+using Models;
 namespace PRHApiClient
 {
-    class Company
+    public class Company
     {
         public string? BusinessId { get; set; }
         public string? Name { get; set; }
@@ -19,7 +20,7 @@ namespace PRHApiClient
         public List<Company> Results { get; set; }
     }
 
-    class PrhApiClient
+    public class PrhApiClient
     {
         private const string ApiBaseUrl = "https://avoindata.prh.fi/bis/v1";
         private readonly HttpClient _httpClient;

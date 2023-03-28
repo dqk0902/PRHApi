@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using PRHApiClient;
-
+using Models;
 namespace PRHapi.Controllers
 {
     [Route("postal_codes")]
