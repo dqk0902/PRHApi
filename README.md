@@ -11,6 +11,7 @@ Make sure you have the following software installed on your machine:
 ## Installation
 To install the project, follow these steps: 
 
+Clone the project from GitHub (if you haven't already) using the command:
 
 git clone https://github.com/dqk0902/PRHApi.git
 

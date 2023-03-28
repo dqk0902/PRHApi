@@ -23,7 +23,7 @@ namespace PRHapi.Controllers
         [HttpGet("{postalCode}/companies")]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompaniesByPostalCode(string postalCode)
         {
-            var connectionString = "Host=localhost;Username=postgres;Password=zzjjjhh;Database=postgres"; 
+            var connectionString = "Host=localhost;Username=yourusername;Password=yourpassword;Database=yourdatabase"; 
             var query = $"SELECT * FROM companies WHERE postal_code = '{postalCode}'";
 
             using (var connection = new NpgsqlConnection(connectionString))
