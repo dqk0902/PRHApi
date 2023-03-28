@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Models;
 
-
-namespace MyDbContext.Db 
+namespace Db 
 {
     public class MyDbContext : DbContext
     {

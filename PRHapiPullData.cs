@@ -6,18 +6,13 @@ using Npgsql;
 using Models;
 namespace PRHApiClient
 {
-    public class Company
-    {
-        public string? BusinessId { get; set; }
-        public string? Name { get; set; }
-        public string? CompanyForm { get; set; }
-        public string? DetailsUri { get; set; }
-        public DateTime RegistrationDate { get; set; }
-    }
-
     class ApiResponse
     {
         public List<Company> Results { get; set; }
+        public IEnumerator<Company> GetEnumerator()
+    {
+        return Results.GetEnumerator();
+    }
     }
 
     public class PrhApiClient
@@ -32,7 +27,7 @@ namespace PRHApiClient
 
         public async Task<List<Company>> GetCompaniesByPostalCode(string postalCode, string connectionString)
 {
-    var requestUrl = $"{ApiBaseUrl}?totalResults=false&maxResults=20&resultsFrom=0&streetAddressPostCode={postalCode}&companyRegistrationFrom=2014-02-28";
+    var requestUrl = $"{ApiBaseUrl}?totalResults=false&maxResults=10&resultsFrom=0&streetAddressPostCode={postalCode}&companyRegistrationFrom=2014-02-28";
 
     var response = await _httpClient.GetAsync(requestUrl);
 
@@ -42,7 +37,7 @@ namespace PRHApiClient
     }
 
     var responseContent = await response.Content.ReadAsStringAsync();
-    var companies = JsonConvert.DeserializeObject<List<Company>>(responseContent);
+    var companies = JsonConvert.DeserializeObject<ApiResponse>(responseContent);
 
     using (var conn = new NpgsqlConnection(connectionString))
     {
@@ -62,7 +57,7 @@ namespace PRHApiClient
         }
     }
 
-    return companies;
+    return companies.Results;
 }
 }
 }

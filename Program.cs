@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using PRHApiClient;
-using MyDbContext.Db;
+using Db;
 using Models;
 public class Startup
 {
@@ -80,7 +80,7 @@ public class Program
     private static async Task GetCompaniesAsync()
     {
         var apiClient = new PrhApiClient();
-        var connectionString = "Host=locallhost;Username=postgres;Password=zzjjjhh;Database=PRHapidb";
+        var connectionString = "Host=localhost;Username=postgres;Password=zzjjjhh;Database=postgres";
         var companies = await apiClient.GetCompaniesByPostalCode("00700", connectionString);
 
         foreach (var company in companies)
